@@ -13,6 +13,9 @@ section = "Politics"
 init_date = '2017-01-02'
 final_date = '2017-07-31'
 
+# Delta para modificar la estimacion de los topics
+delta = 0.40
+
 # Carpeta donde guardar la informacion
 foldername = '{}_{}'.format(newspaper, section)
 
@@ -23,7 +26,7 @@ xtfidf, features, ids_relation, content = \
 
 ntopics, features_filtered, inferior, superior, density = \
                   aux_func.topics_estimation(xtfidf, \
-                  features, delta = 0.10)
+                  features, delta = delta)
 
 print '# Topics estimated: {}'.format(ntopics)
 

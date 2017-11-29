@@ -81,8 +81,9 @@ def nmf_decomposition(xtfidf, ntopics, random_seed = 123457):
 
     # Realiza varias iteraciones para quedarse con la de minimo error
     rs = 0
+    iterations = 3
     err_random = []
-    while rs < 5:
+    while rs < iterations:
 
         random_seed = random_seed + rs
         nmf = NMF(ntopics, random_state = random_seed)
@@ -92,6 +93,7 @@ def nmf_decomposition(xtfidf, ntopics, random_seed = 123457):
         err_random.append([random_seed, err])
 
         rs += 1
+        print 'Iteration {}/{}. Error: {}'.format(rs, iterations, err)
 
     min_seed = min(err_random, key = lambda x: x[1])[0]
     nmf = NMF(ntopics, random_state = random_seed)
