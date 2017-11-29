@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def tfidf_matrix(newspaper, init_date, final_date, section):
+def tfidf_matrix(database_path, newspaper, init_date, final_date, section):
 
     import sqlite3
     from sklearn.feature_extraction.text import TfidfVectorizer as Tfidf
@@ -16,7 +16,7 @@ def tfidf_matrix(newspaper, init_date, final_date, section):
     else:
         order +=  u' where date >= "{}" and date < "{}" and title IS NOT NULL;'.format(init_date, final_date)
 
-    conn = sqlite3.connect('../data.db')
+    conn = sqlite3.connect(database_path)
     c = conn.cursor()
     c.execute(order)
 
@@ -79,9 +79,23 @@ def nmf_decomposition(xtfidf, ntopics, random_seed = 123457):
 
     from sklearn.decomposition import NMF
 
-    nmf = NMF(ntopics, random_state = random_seed)
+    # Realiza varias iteraciones para quedarse con la de minimo error
+    rs = 0
+    err_random = []
+    while rs < 5:
 
-    xnmf = nmf.fit_transform(xtfidf)
+        random_seed = random_seed + rs
+        nmf = NMF(ntopics, random_state = random_seed)
+        xnmf = nmf.fit_transform(xtfidf)
+
+        err = nmf.reconstruction_err_
+        err_random.append([random_seed, err])
+
+        rs += 1
+
+    min_seed = min(err_random, key = lambda x: x[1])[0]
+    nmf = NMF(ntopics, random_state = random_seed)
+    xnmf = nmf.fit_transform(xtfidf)        
 
     return xnmf, nmf.components_
 
@@ -193,37 +207,3 @@ def save_temporal_profile(foldername, xnmf, ids_relation, content, offset = 0):
                 if notes_topics[j] == i:
                     csvfile.write('{}\n'.format(ids_relation[j]['db_id']))
             csvfile.close()
-
-
-def related_topics(foldername, topic, n_sigmas = 5):
-
-    import cPickle as pk
-    import numpy as np
-
-    vector_topics = []
-    """ Vector representation """
-    for j in range(1000):
-      try:
-        vector_topics.append(pk.load(file(foldername + \
-                             '/topic{}_vect.pk'.format(j),'r')))
-      except:
-        pass
-
-    components_array = np.zeros([len(vector_topics), len(vector_topics[0])])
-    for j in range(len(vector_topics)):
-        components_array[j] = vector_topics[j]
-
-    from sklearn.preprocessing import Normalizer
-    norm2 = Normalizer('l2')
-    comp_array = norm2.fit_transform(components_array)
-
-    n_top = len(vector_topics)
-    corrs = [comp_array[node1].dot(comp_array[node2]) \
-             for node1 in range(n_top) for node2 in range(node1+1, n_top)]
-
-    threshold = np.mean(corrs) + n_sigmas * np.std(corrs)
-
-    related_topics = [i for i in range(n_top) \
-                      if comp_array[topic].dot(comp_array[i]) > threshold]
-
-    return related_topics    

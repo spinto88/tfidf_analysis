@@ -8,22 +8,23 @@ init_date = "2016-01-01"
 final_date = "2017-08-01"
 
 database_path = 'data.db'
+stopwords = 'Stopwords/english_stopwords.txt'
 
-newspapers = ['nytimes', shtimes']
+newspapers = ['nytimes', 'wshtimes']
+
 
 conn = sqlite3.connect(database_path)
 c = conn.cursor()
 
-c.execute(u'select title, body from nytimes where title IS NOT NULL and body IS NOT NULL and date >= "{}" and date <= "{}";'.format(init_date, final_date))
-content = [row[0] + row[1] for row in c]
-c.execute(u'select title, body from wshtimes where title IS NOT NULL and body IS NOT NULL and date >= "{}" and date <= "{}";'.format(init_date, final_date))
-content = [row[0] + row[1] for row in c]
+content = []
+for newspaper in newspapers:
+    c.execute(u'select title, body from {} where title IS NOT NULL and body IS NOT NULL and date >= "{}" and date <= "{}";'.format(newspaper, init_date, final_date))
+    content += [row[0] + row[1] for row in c]
 
 conn.close()
 
 #Palabras comunes
-import codecs
-fp = codecs.open("stopwords.txt", "r", encoding = "utf-8")
+fp = codecs.open(stopwords, "r", encoding = "utf-8")
 data = fp.read()
 fp.close()
 aux = data.split('\n')
