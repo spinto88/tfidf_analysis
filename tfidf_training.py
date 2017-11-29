@@ -8,7 +8,7 @@ init_date = "2016-01-01"
 final_date = "2017-08-01"
 
 database_path = 'data.db'
-stopwords = 'Stopwords/english_stopwords.txt'
+stopwords = 'Stopwords/stopwords_english.txt'
 
 newspapers = ['nytimes', 'wshtimes']
 
