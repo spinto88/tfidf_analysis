@@ -138,6 +138,7 @@ def save_features(foldername, features, components, nprincipal = 10, offset = 0)
 
     for j in range(len(pf)):
         fp = codecs.open(foldername + '/features.txt'.format(j + offset), 'a', 'utf8')
+        fp.write(u'Topic {}: '.format(j))
         for k in pf[j]:
             fp.write(u'{}, '.format(k))
         fp.write('\n')
