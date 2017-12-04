@@ -1,8 +1,13 @@
+# -*- coding: utf-8 -*-
+
 import cPickle as pk
 from sklearn.preprocessing import Normalizer
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import random
+
+random.seed(123457)
 
 newspaper = 'lanacion'
 ntopics = 64

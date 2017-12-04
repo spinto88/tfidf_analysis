@@ -27,7 +27,12 @@ conn.close()
 fp = codecs.open(stopwords, "r", encoding = "utf-8")
 data = fp.read()
 fp.close()
-aux = data.split('\n')
+
+if 'spanish' in stopwords:
+    aux = data.split('\r\n')
+elif 'english' in stopwords:
+    aux = data.split('\n')
+
 words = [a.lower() for a in aux]
 
 """

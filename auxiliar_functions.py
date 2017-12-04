@@ -11,7 +11,7 @@ def tfidf_matrix(database_path, newspaper, init_date, final_date, section):
 
     order = u'select distinct id, date, title, body from {}'.format(newspaper)
     if section != None:
-        order += u' where section like "%{}%"'.format(section)
+        order += u' where section like "%{}%"'.format(section.decode('utf-8'))
         order +=  u' and date >= "{}" and date < "{}" and title IS NOT NULL;'.format(init_date, final_date)
     else:
         order +=  u' where date >= "{}" and date < "{}" and title IS NOT NULL;'.format(init_date, final_date)
