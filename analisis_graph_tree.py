@@ -9,16 +9,16 @@ import random
 
 random.seed(123457)
 
-newspaper = 'lanacion'
-ntopics = 64
+newspaper = 'wshtimes_Politics'
+ntopics = 60
 
 norm2 = Normalizer('l2')
 
-first_topic = pk.load(file("../{}/topic{}_vect.pk".format(newspaper, 0), 'r'))
+first_topic = pk.load(file("{}/topic{}_vect.pk".format(newspaper, 0), 'r'))
 topics = np.zeros([ntopics, first_topic.shape[0]])
 
 for i in range(ntopics):
-    topics[i] = pk.load(file("../{}/topic{}_vect.pk".format(newspaper, i), 'r'))
+    topics[i] = pk.load(file("{}/topic{}_vect.pk".format(newspaper, i), 'r'))
 
 topics = norm2.fit_transform(topics)
 
@@ -55,7 +55,7 @@ vertex_size = []
 
 for i in range(ntopics):
 
-    fp = open("../{}/topic{}_idnotes.csv".format(newspaper, i), 'r')
+    fp = open("{}/topic{}_idnotes.csv".format(newspaper, i), 'r')
     notes = fp.read()
     fp.close()
     
@@ -64,14 +64,7 @@ for i in range(ntopics):
 vertex_size = 40 * (np.array(vertex_size, dtype = np.float) - np.min(vertex_size)) / \
 		(np.max(vertex_size) - np.min(vertex_size)) + 10
                
-"""
-vertex_size = [10 + 15 * np.sum([es['weight'] for es in graph.es() \
-                       if es.target == vs.index \
-                       or es.source == vs.index]) for vs in graph.vs]
-"""
-
 igraph.plot(graph, vertex_size = vertex_size, vertex_label = [vs['name'] for vs in graph.vs], vertex_label_size = 8, vertex_color = 'cyan', edge_width = [es['weight'] * 10 for es in graph.es()], target = "{}_layout{}.pdf".format(newspaper, ntopics))
 
-"""
-igraph.plot(graph, vertex_size = vertex_size, vertex_label = [vs['name'] for vs in graph.vs], vertex_label_size = 8, vertex_color = 'cyan', edge_width = [es['weight'] * 10 for es in graph.es()])
-"""
+import os
+os.remove("Edge_list.txt")

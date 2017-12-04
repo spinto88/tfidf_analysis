@@ -7,7 +7,7 @@ import codecs
 init_date = "2016-01-01"
 final_date = "2017-08-01"
 
-database_path = 'data.db'
+database_path = '../data.db'
 stopwords = 'Stopwords/stopwords_english.txt'
 
 newspapers = ['nytimes', 'wshtimes']

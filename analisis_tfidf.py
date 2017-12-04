@@ -3,7 +3,7 @@
 import auxiliar_functions as aux_func
 
 # Direccion de la base de datos
-database_path = 'data.db'
+database_path = '../data.db'
 
 # Diario y section para analizar
 newspaper = 'wshtimes'
@@ -14,7 +14,7 @@ init_date = '2017-01-02'
 final_date = '2017-07-31'
 
 # Delta para modificar la estimacion de los topics
-delta = 0.40
+delta = 0.10
 
 # Carpeta donde guardar la informacion
 foldername = '{}_{}'.format(newspaper, section)
