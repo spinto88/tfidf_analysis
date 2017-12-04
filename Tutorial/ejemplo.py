@@ -16,10 +16,10 @@ content = [codecs.open('texts/text{}.txt'.format(i), "r", encoding = "utf-8").re
            for i in range(Ndocuments)]
 
 # Carga de stopwords en archivo externo
-stopwords = codecs.open('stopwords_spanish.txt').read().split('\n')
+stopwords = codecs.open('stopwords_spanish.txt').read().split('\r\n')
 
 tfidf = TFIDF(min_df = 2, max_df = 0.95, stop_words = stopwords, \
-              ngram_range = (1,3), norm = 'l2')
+              ngram_range = (1,1), norm = 'l2')
 
 # Entreno con el contenido
 tfidf.fit(content)
